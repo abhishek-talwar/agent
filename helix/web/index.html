@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Helix · local-first AI agent</title>
+<link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo">⌘</span> Helix <small>local-first agent</small></div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="solve">Solve</button>
+    <button class="tab" data-tab="chat">Chat</button>
+    <button class="tab" data-tab="diffs">Diffs <span id="diffCount" class="pill">0</span></button>
+    <button class="tab" data-tab="memory">Memory</button>
+  </nav>
+  <div class="status"><span id="health" class="dot"></span><span id="modelLabel">…</span></div>
+</header>
+
+<main>
+  <!-- SOLVE -->
+  <section id="tab-solve" class="panel active">
+    <div class="grid">
+      <div class="col">
+        <h2>Problem statement</h2>
+        <textarea id="problemStatement" rows="6" placeholder="e.g. The /api/users endpoint returns 500 when the email field is missing. Make it return 400 with a clear message."></textarea>
+
+        <h3>Acceptance criteria <button id="addCriterion" class="ghost">+ add</button></h3>
+        <p class="hint">A problem is only marked solved when every criterion passes. This is the guard Hermes/OpenClaw lack.</p>
+        <div id="criteriaList" class="criteria"></div>
+
+        <h3>Constraints (optional)</h3>
+        <input id="constraints" placeholder="comma separated, e.g. no new dependencies, keep Python 3.11 compat" />
+
+        <label class="checkbox"><input type="checkbox" id="solveMock" /> run with offline mock model</label>
+        <button id="solveBtn" class="primary">Solve problem</button>
+      </div>
+
+      <div class="col">
+        <h2>Plan &amp; evidence</h2>
+        <div id="solveStatus" class="empty">No solve running. Enter a problem and press Solve.</div>
+        <div id="planDag" class="dag"></div>
+        <div id="verifyBox"></div>
+        <h3>Live log</h3>
+        <pre id="solveLog" class="log"></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <section id="tab-chat" class="panel">
+    <div class="chat">
+      <div id="messages" class="messages"></div>
+      <div class="composer">
+        <input id="chatInput" placeholder="Ask Helix to do something…  (e.g. run: python -m pytest)" />
+        <label class="checkbox"><input type="checkbox" id="chatMock" /> mock</label>
+        <button id="sendBtn" class="primary">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFFS -->
+  <section id="tab-diffs" class="panel">
+    <div class="diffwrap">
+      <aside id="diffList" class="difflist"></aside>
+      <div id="diffView" class="diffview">
+        <div class="empty">Select a diff to review. Every file change the agent proposes appears here for approval.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMORY -->
+  <section id="tab-memory" class="panel">
+    <div class="grid">
+      <div class="col">
+        <h2>Memory notes</h2>
+        <div id="memoryList" class="list"></div>
+        <h3>Add a note</h3>
+        <input id="memTitle" placeholder="title" />
+        <textarea id="memBody" rows="3" placeholder="what should Helix remember?"></textarea>
+        <button id="memBtn" class="primary">Save note</button>
+      </div>
+      <div class="col">
+        <h2>Auto-generated skills</h2>
+        <p class="hint">Lessons Helix writes back to disk as it solves problems.</p>
+        <div id="skillList" class="list"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
